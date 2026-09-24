@@ -1,0 +1,125 @@
+{
+  "rendererVersion": "0.1.0",
+  "runtime": {
+    "name": "Node.js",
+    "version": "24.8.0",
+    "license": "MIT",
+    "licenseFile": "licenses/NODE-LICENSE.txt"
+  },
+  "embeddedLibraries": [
+    { "name": "@resvg/resvg-wasm", "version": "2.6.2", "license": "MPL-2.0" },
+    { "name": "opentype.js", "version": "1.3.4", "license": "MIT" },
+    { "name": "string.prototype.codepointat", "version": "0.2.1", "license": "MIT" },
+    { "name": "tiny-inflate", "version": "1.0.3", "license": "MIT" }
+  ],
+  "sources": {
+    "windows-amd64": {
+      "url": "https://nodejs.org/download/release/v24.8.0/win-x64/node.exe",
+      "size": 89631216,
+      "sha256": "3a9ac860c566b7aebf144be914f95e3ec36dc88040aa7acb5d9d1e6e0c7afd5e"
+    },
+    "linux-amd64": {
+      "url": "https://nodejs.org/download/release/v24.8.0/node-v24.8.0-linux-x64.tar.gz",
+      "size": 58884829,
+      "sha256": "daf68404b478b4c3616666580d02500a24148c0f439e4d0134d65ce70e90e655"
+    },
+    "linux-arm64": {
+      "url": "https://nodejs.org/download/release/v24.8.0/node-v24.8.0-linux-arm64.tar.gz",
+      "size": 58505269,
+      "sha256": "5eb16b14af5a5f494ed54770822144e847c744fe590f8df093ad4927cf3dd7fd"
+    },
+    "darwin-amd64": {
+      "url": "https://nodejs.org/download/release/v24.8.0/node-v24.8.0-darwin-x64.tar.gz",
+      "size": 52266337,
+      "sha256": "6fd8496b59baa8f86a24e3eb03308b763091716ffc6b6e1094d1a5e5696dd6dd"
+    },
+    "darwin-arm64": {
+      "url": "https://nodejs.org/download/release/v24.8.0/node-v24.8.0-darwin-arm64.tar.gz",
+      "size": 51094172,
+      "sha256": "d81191a1866760eb918caa976c023036bc1fc7405ea31b148905211522045767"
+    }
+  },
+  "runtimeFiles": {
+    "windows-amd64": {
+      "path": "assets/chart-renderer/runtime/windows-amd64/node.exe",
+      "source": "windows-amd64",
+      "size": 89631216,
+      "sha256": "3a9ac860c566b7aebf144be914f95e3ec36dc88040aa7acb5d9d1e6e0c7afd5e"
+    },
+    "linux-amd64": {
+      "path": "assets/chart-renderer/runtime/linux-amd64/node",
+      "source": "linux-amd64",
+      "archiveEntry": "node-v24.8.0-linux-x64/bin/node",
+      "size": 129318464,
+      "sha256": "85ede4ce63fdae514aea9f1d93db8fa53a13ed9eeb2f1b212cd0fd1df5f07e9e"
+    },
+    "linux-arm64": {
+      "path": "assets/chart-renderer/runtime/linux-arm64/node",
+      "source": "linux-arm64",
+      "archiveEntry": "node-v24.8.0-linux-arm64/bin/node",
+      "size": 126278720,
+      "sha256": "3e74ab04f89a2396eaf14721e6cd47ef9a33dba9edd409600ff0f7783d2f6e29"
+    },
+    "darwin-amd64": {
+      "path": "assets/chart-renderer/runtime/darwin-amd64/node",
+      "source": "darwin-amd64",
+      "archiveEntry": "node-v24.8.0-darwin-x64/bin/node",
+      "size": 119545280,
+      "sha256": "74a32318f5ad5a500a07047a22139a45b33a72bb07a7bbf0119908866a11d4c4"
+    },
+    "darwin-arm64": {
+      "path": "assets/chart-renderer/runtime/darwin-arm64/node",
+      "source": "darwin-arm64",
+      "archiveEntry": "node-v24.8.0-darwin-arm64/bin/node",
+      "size": 117216384,
+      "sha256": "63980caabf84bf344205aa3b005a84e342a944d9c15905c0c2888540e81b8f14"
+    }
+  },
+	"runtimeArchives": {
+		"windows-amd64": {
+			"path": "assets/chart-renderer/runtime/windows-amd64/node.exe.gz",
+			"runtimePath": "assets/chart-renderer/runtime/windows-amd64/node.exe",
+			"format": "gzip",
+			"size": 34368222,
+			"sha256": "e363261b27e7ff774bea4364c346824374c2b5ffb5d785e84d72ca5300e8f899"
+		},
+		"linux-amd64": {
+			"path": "assets/chart-renderer/runtime/linux-amd64/node.gz",
+			"runtimePath": "assets/chart-renderer/runtime/linux-amd64/node",
+			"format": "gzip",
+			"size": 46505482,
+			"sha256": "37ed501d8c05c93406e338d488365a75c50e56d310a3e2f2f27750744cbbb432"
+		},
+		"linux-arm64": {
+			"path": "assets/chart-renderer/runtime/linux-arm64/node.gz",
+			"runtimePath": "assets/chart-renderer/runtime/linux-arm64/node",
+			"format": "gzip",
+			"size": 46383855,
+			"sha256": "92383892b1c51b5ff66cc34c0e6f319c27676797935474755b58dbee82cedff0"
+		},
+		"darwin-amd64": {
+			"path": "assets/chart-renderer/runtime/darwin-amd64/node.gz",
+			"runtimePath": "assets/chart-renderer/runtime/darwin-amd64/node",
+			"format": "gzip",
+			"size": 39672015,
+			"sha256": "c193879fe7de06ef17f9f86d22f9b1380b44302b34e9ce66adbab949d30f6341"
+		},
+		"darwin-arm64": {
+			"path": "assets/chart-renderer/runtime/darwin-arm64/node.gz",
+			"runtimePath": "assets/chart-renderer/runtime/darwin-arm64/node",
+			"format": "gzip",
+			"size": 38706817,
+			"sha256": "165b862010a03336c423831ae5b3c52994999061125563683aa8fe5dc0ed2557"
+		}
+	},
+  "rendererFiles": {
+    "chart-renderer-package.json": { "path": "assets/chart-renderer-package.json", "size": 191, "sha256": "7933228e43b6a0ce3f234eac369a343c27a8c5a1b3fc7146fc6eea46e85d9e5e" },
+    "chart-renderer-constants.mjs": { "path": "assets/chart-renderer-constants.mjs", "size": 6409, "sha256": "395ae97c611185853502af5f6960ba5bb17c50deb7cc93466f8403530927fccf" },
+    "chart-renderer.mjs": { "path": "assets/chart-renderer.mjs", "size": 64327, "sha256": "974d72a5e4bed382b008159544c38e7fcd349b6e993897db0d0e4d3aa6d6e454" },
+    "resvg-wasm.mjs": { "path": "assets/resvg-wasm.mjs", "size": 17048, "sha256": "10170d02d816f02ec76f9bc095b01d9becf536e7b1e12e5aa616652c84b237a1" },
+    "resvg-wasm-bg.wasm": { "path": "assets/resvg-wasm-bg.wasm", "size": 2478606, "sha256": "22bf6e9f9a100d972da0411a69c5ba504367fc1fa87b3b64e3f35e53926d2d70" },
+    "resvg-wasm-package.json": { "path": "assets/resvg-wasm-package.json", "size": 903, "sha256": "4a9efcb54b2670726ccf9b91086413676c3de0fae607cce3b8a5a0d25abaff48" },
+    "opentype.cjs": { "path": "assets/opentype.cjs", "size": 477325, "sha256": "aca3813e716a07e06c2e32c736d841508b15451cf39483f289acbd879c64d09f" },
+    "opentype-package.json": { "path": "assets/opentype-package.json", "size": 1618, "sha256": "55f5100e9f5bbf19b4193fe90730da32c585b941a486159ac8dbc1d18219d7db" }
+  }
+}

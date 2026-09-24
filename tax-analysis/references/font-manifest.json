@@ -1,0 +1,28 @@
+{
+  "family": "Noto Sans SC",
+  "sourceVersion": "Noto Sans CJK 2.004 (Sans2.004)",
+  "sourceUrl": "https://raw.githubusercontent.com/notofonts/noto-cjk/Sans2.004/Sans/Variable/TTF/Subset/NotoSansSC-VF.ttf",
+  "sourceSize": 17773132,
+  "sourceSha256": "d68bafcb48a2707749396aa12bbbd833cb70401f3a9a689fd2902c7e0d295964",
+  "derivation": "fontTools 4.59.1 varLib.instancer wght=400/700; name records normalized to Regular/Bold",
+  "license": "SIL Open Font License 1.1",
+  "licenseUrl": "https://github.com/notofonts/noto-cjk/blob/Sans2.004/LICENSE",
+  "embeddingReference": "https://openfontlicense.org/ofl-faq/",
+  "files": [
+    {
+      "name": "NotoSansSC-Regular.ttf",
+      "size": 10596340,
+      "sha256": "147cb15dae4c1327ef1e135416f371b32033c8504b93588b110ee92992b3b046"
+    },
+    {
+      "name": "NotoSansSC-Bold.ttf",
+      "size": 10585860,
+      "sha256": "3d5f289b1cdfecc702c3eaf8464ce87b2b5b973d14cc33385cc26cf1e3b71cf5"
+    },
+    {
+      "name": "OFL.txt",
+      "size": 4379,
+      "sha256": "eddf1ad0c3c9bfcdb14ca7e0fd276f0eb64e4a7978e8c12d05e697e09aa9572d"
+    }
+  ]
+}

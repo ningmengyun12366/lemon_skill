@@ -1,0 +1,19 @@
+{
+  "designFileKey": "LdaPSdpOUIJZAYy8bJb4Fa",
+  "designNodes": {
+    "cover": "30:21",
+    "toc": "0:663",
+    "body": "7:21"
+  },
+  "sourceCanvas": "1190x1684",
+  "componentPolicy": "TOC and body nodes contain design-native text, rules and rectangles; their raw raster fills are example table content, not reusable page assets. These shapes are rendered from shared design tokens instead of packaging example screenshots.",
+  "assets": [
+    {
+      "filename": "report-cover.png",
+      "path": "assets/report-cover.png",
+      "size": 9146096,
+      "sha256": "a8617083187db7463fb5fb0230ee07a4a41873d41356f6fd28dd4f60001ce8bd",
+      "purpose": "Figma cover background without example company or dates"
+    }
+  ]
+}

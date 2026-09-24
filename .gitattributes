@@ -1,0 +1,5 @@
+# Pinned renderer inputs must have identical bytes on every build platform.
+/go-script/lib/tax-analysis/chart-renderer/renderer.js text eol=lf
+/go-script/lib/tax-analysis/chart-renderer/renderer.constants.js text eol=lf
+/go-script/lib/tax-analysis/chart-renderer/package.json text eol=lf
+/tax-analysis/assets/fonts/OFL.txt text eol=lf

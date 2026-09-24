@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>电子发票预览</title>
+    <style>
+      body {
+        font-family: "SimSun", "宋体", serif;
+        color: #8b4513; /* 棕色发票字体和边框颜色 */
+        background-color: #f9f9f9;
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0;
+      }
+
+      #invoice-app {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 1050px;
+      }
+
+      /* 页面居中包裹层，每张发票的容器 */
+      .page-wrapper {
+        position: relative;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 屏幕上显示阴影更好看 */
+        overflow: hidden;
+        box-sizing: border-box;
+      }
+
+      /* 水印样式 */
+      .watermark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        pointer-events: none;
+        z-index: 10;
+        /* 使用SVG重复作为背景绘制水印 */
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'><text x='50%' y='50%' transform='rotate(-30, 200, 150)' fill='rgba(200, 200, 200, 0.3)' font-size='32' font-family='simhei, sans-serif' text-anchor='middle' dominant-baseline='middle'>预览票样，非真实发票</text></svg>");
+      }
+
+      /* 顶部标题区块 */
+      .invoice-header {
+        position: relative;
+        width: 100%;
+        text-align: center;
+        margin-bottom: 30px;
+        color: #8b4513;
+      }
+
+      .title-container {
+        display: inline-block;
+      }
+
+      .invoice-title {
+        font-size: 36px;
+        font-family: "KaiTi", "楷体", STKaiti, serif;
+        font-weight: normal;
+        margin: 0;
+        letter-spacing: 2px;
+      }
+
+      /* 标题下方的双实线 */
+      .title-double-line {
+        width: 100%;
+        height: 4px;
+        border-top: 2px solid #8b4513;
+        border-bottom: 1px solid #8b4513;
+        margin-top: 8px;
+      }
+
+      /* 发票号码 */
+      .invoice-number {
+        position: absolute;
+        right: 32px;
+        bottom: 0;
+        font-size: 14px;
+      }
+
+      /* 基础表格容器 */
+      .invoice-container {
+        width: 100%;
+        border: 2px solid #8b4513;
+        background-color: transparent;
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* 通用边框和布局 */
+      .row {
+        display: flex;
+        border-bottom: 2px solid #8b4513;
+      }
+      .row:last-child {
+        border-bottom: none;
+      }
+
+      .vertical-text {
+        width: 30px;
+        text-align: center;
+        padding: 10px 5px;
+        border-right: 2px solid #8b4513;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1.5;
+        letter-spacing: 2px;
+      }
+
+      .info-content {
+        flex: 1;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+      }
+
+      .info-content p {
+        margin: 0;
+        display: flex;
+        align-items: center;
+      }
+
+      .info-content .info-line + .info-line {
+        margin-top: 8px;
+      }
+
+      .info-content span.value {
+        margin-left: 10px;
+        color: #333;
+      }
+
+      /* 买卖方信息区块 */
+      .half-box {
+        flex: 1;
+        display: flex;
+      }
+      .half-box:first-child {
+        border-right: 2px solid #8b4513;
+      }
+
+      /* 商品明细区块 */
+      .items-section {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .items-grid {
+        display: grid;
+        grid-template-columns: 3fr 1.5fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        text-align: center;
+        padding: 6px 5px;
+      }
+
+      .items-header {
+        border-bottom: 1px solid #8b4513;
+      }
+
+      .items-list {
+        height: 130px;
+        overflow-y: auto;
+      }
+
+      .item-row {
+        color: #333;
+        padding: 5px;
+        font-size: 14px;
+      }
+      .item-row div:first-child {
+        text-align: left;
+        padding-left: 5px;
+      }
+
+      .items-total {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 15px;
+        border-top: 1px solid #8b4513;
+      }
+
+      .items-total .total-values {
+        display: flex;
+        width: 25%;
+        justify-content: space-between;
+        color: #333;
+        padding-right: 20px;
+      }
+
+      /* 价税合计区块 */
+      .grand-total {
+        display: flex;
+        align-items: center;
+      }
+      .grand-total-label {
+        width: 200px;
+        text-align: center;
+        border-right: 2px solid #8b4513;
+        padding: 10px;
+      }
+      .grand-total-words {
+        flex: 1;
+        padding: 10px 15px;
+        color: #333;
+      }
+      .grand-total-figures {
+        width: 200px;
+        padding: 10px 15px;
+        color: #333;
+      }
+
+      /* 备注区块 */
+      .remarks-section {
+        height: 110px;
+      }
+      .remarks-content {
+        flex: 1;
+        padding: 5px 10px;
+        color: #333;
+        white-space: pre-line;
+        height: 80px;
+        overflow-y: auto;
+      }
+
+      /* 分页控制区 */
+      .pagination-controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        margin: 10px 0 20px 0;
+        width: 100%;
+      }
+      .pagination-controls button {
+        padding: 8px 20px;
+        font-size: 14px;
+        cursor: pointer;
+        background-color: #8b4513;
+        color: white;
+        border: none;
+        border-radius: 4px;
+      }
+      .pagination-controls button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+      .pagination-info {
+        color: #8b4513;
+        font-weight: bold;
+      }
+
+      /* 底部开票人信息 */
+      .invoice-footer {
+        width: 100%;
+        margin-top: 15px;
+        font-size: 14px;
+        color: #8b4513;
+        position: relative;
+        z-index: 1;
+        padding-left: 32px;
+      }
+
+      /* 打印样式适配：确保打印时每张发票单独一页，且去除多余背景和阴影 */
+      @media print {
+        body {
+          background-color: #fff;
+          padding: 0;
+        }
+        .page-wrapper {
+          box-shadow: none;
+          margin-bottom: 0;
+          padding: 0;
+          page-break-after: always; /* 打印时自动分页 */
+        }
+        .page-wrapper:last-child {
+          page-break-after: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 所有发票将被渲染到这个容器中 -->
+    <div id="invoice-app"></div>
+
+    <script>
+      const invoiceList =
+        typeof __INVOICE_PREVIEW_DATA__ !== "undefined"
+          ? __INVOICE_PREVIEW_DATA__
+          : [];
+
+      function escapeHtml(value) {
+        return String(value || "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#39;");
+      }
+
+      function renderInfoRows(lines) {
+        return (lines || [])
+          .map(
+            (line) =>
+              `<p class="info-line"><span class="value">${escapeHtml(line)}</span></p>`,
+          )
+          .join("");
+      }
+
+      function formatCurrencyDisplay(value) {
+        const text = String(value || "").trim();
+        if (!text || text === "***") {
+          return escapeHtml(text);
+        }
+
+        return `¥${escapeHtml(text)}`;
+      }
+
+      function getPartyFieldValue(lines, label) {
+        const prefix = `${label}：`;
+        const matchedLine = (lines || []).find((line) =>
+          String(line || "").startsWith(prefix),
+        );
+
+        if (!matchedLine) {
+          return "";
+        }
+
+        return String(matchedLine).slice(prefix.length).trim();
+      }
+
+      function renderPartyInfo(lines) {
+        const name = getPartyFieldValue(lines, "名称");
+        const taxId = getPartyFieldValue(
+          lines,
+          "统一社会信用代码/纳税人识别号",
+        );
+
+        return `
+          <p class="info-line"><span>名称：</span><span class="value">${escapeHtml(name)}</span></p>
+          <p class="info-line"><span>统一社会信用代码/纳税人识别号：</span><span class="value">${escapeHtml(taxId)}</span></p>
+        `;
+      }
+
+      // === 渲染函数 ===
+      let currentIndex = 0;
+
+      function renderInvoices(invoices) {
+        const appContainer = document.getElementById("invoice-app");
+
+        if (!Array.isArray(invoices) || invoices.length === 0) {
+          appContainer.innerHTML =
+            '<div class="page-wrapper">未生成可预览的发票数据</div>';
+          return;
+        }
+
+        window.changeInvoice = function (delta) {
+          const newIndex = currentIndex + delta;
+          if (newIndex >= 0 && newIndex < invoices.length) {
+            currentIndex = newIndex;
+            renderSingle(currentIndex);
+          }
+        };
+
+        function renderSingle(index) {
+          const data = invoices[index];
+          // 1. 拼接商品明细行 HTML
+          let itemsHtml = "";
+          (data.items || []).forEach((item) => {
+            itemsHtml += `
+                        <div class="items-grid item-row">
+                            <div>${escapeHtml(item.name || "")}</div>
+                            <div>${escapeHtml(item.spec || "")}</div>
+                            <div>${escapeHtml(item.unit || "")}</div>
+                            <div>${escapeHtml(item.quantity || "")}</div>
+                            <div>${escapeHtml(item.price || "")}</div>
+                            <div>${escapeHtml(item.amount || "")}</div>
+                            <div>${escapeHtml(item.taxRate || "")}</div>
+                            <div>${escapeHtml(item.taxAmount || "")}</div>
+                        </div>
+                    `;
+          });
+
+          // 2. 分页控制栏
+          let paginationHtml = "";
+          if (invoices.length > 1) {
+            const prevDisabled = index === 0 ? "disabled" : "";
+            const nextDisabled =
+              index === invoices.length - 1 ? "disabled" : "";
+            paginationHtml = `
+                    <div class="pagination-controls">
+                        <button onclick="changeInvoice(-1)" ${prevDisabled}>上一张</button>
+                        <span class="pagination-info">第 ${index + 1} / ${invoices.length} 张</span>
+                        <button onclick="changeInvoice(1)" ${nextDisabled}>下一张</button>
+                    </div>
+            `;
+          }
+
+          // 3. 拼接单张发票的完整 HTML
+          const invoiceHtml = `
+                    <div class="page-wrapper">
+                        <!-- 水印 -->
+                        <div class="watermark"></div>
+
+                        <!-- 顶部标题 -->
+                        <div class="invoice-header">
+                            <div class="title-container">
+                                <h1 class="invoice-title">电子发票（<span>${data.titleType || "普通发票"}</span>）</h1>
+                                <div class="title-double-line"></div>
+                            </div>
+                            <div class="invoice-number">发票号码：-</div>
+                        </div>
+
+                        <div class="invoice-container">
+                            <!-- 顶部：购买方与销售方 -->
+                            <div class="row">
+                                <div class="half-box">
+                                    <div class="vertical-text">购买方信息</div>
+                                    <div class="info-content">
+                                  ${renderPartyInfo(data.buyerLines)}
+                                    </div>
+                                </div>
+                                <div class="half-box">
+                                    <div class="vertical-text">销售方信息</div>
+                                    <div class="info-content">
+                                  ${renderPartyInfo(data.sellerLines)}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 中部：商品明细 -->
+                            <div class="row items-section">
+                                <div class="items-grid items-header">
+                                    <div>项目名称</div>
+                                    <div>规格型号</div>
+                                    <div>单 位</div>
+                                    <div>数 量</div>
+                                  <div>单 价</div>
+                                  <div>金 额</div>
+                                  <div>税率/征收率</div>
+                                    <div>税 额</div>
+                                </div>
+                                
+                                <div class="items-list">
+                                    ${itemsHtml}
+                                </div>
+
+                                <div class="items-total">
+                                    <div style="padding-left: 30px;">合 计</div>
+                                    <div class="total-values">
+                                  <div>${formatCurrencyDisplay(data.summary?.totalAmount)}</div>
+                                  <div>${formatCurrencyDisplay(data.summary?.totalTax)}</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 价税合计 -->
+                            <div class="row grand-total">
+                                <div class="grand-total-label">价税合计（大写）</div>
+                              <div class="grand-total-words">⊗ ${escapeHtml(data.summary?.grandTotalWords)}</div>
+                              <div class="grand-total-figures">（小写） ¥${escapeHtml(data.summary?.grandTotalFigures)}</div>
+                            </div>
+
+                            <!-- 底部：备注 -->
+                            <div class="row remarks-section">
+                                <div class="vertical-text">备 注</div>
+                              <div class="remarks-content">${escapeHtml(data.remarks || "")}</div>
+                            </div>
+                        </div>
+
+                        <!-- 底部：开票人 -->
+                        <div class="invoice-footer">
+                            开票人：
+                        </div>
+                    </div>
+                    ${paginationHtml}
+                `;
+
+          appContainer.innerHTML = invoiceHtml;
+        }
+
+        renderSingle(currentIndex);
+      }
+
+      // 页面加载完成后执行渲染
+      window.onload = () => {
+        renderInvoices(invoiceList);
+      };
+    </script>
+  </body>
+</html>

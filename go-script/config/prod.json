@@ -1,0 +1,8 @@
+{
+  "environment": "prod",
+  "verify_api_endpoint": "https://openapi.nmy.cn/api/v1/skill/national-invoice-check",
+  "invoice_check_code": "invoice_check",
+  "open_api_skill_base_url": "https://openapi.nmy.cn/api/v1/skill",
+  "open_api_page_url": "https://www.nmy.cn",
+  "open_api_contact_service_url": "https://www.nmy.cn/contactService"
+}

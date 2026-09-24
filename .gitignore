@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.invoice-config/
+invoice-workspace/
+workspace/
+temporary/
+logs/
+*.log
+.DS_Store
+Thumbs.db

@@ -1,0 +1,15 @@
+{
+  "environments": {
+    "prod": {
+      "prefix": "Skills",
+      "publicBaseUrl": "https://download.ningmengyun.com/Skills"
+    }
+  },
+  "urls": {
+    "installDoc": "${baseUrl}/${skill}/${skill}-install.md",
+    "zip": "${baseUrl}/${skill}/${skill}-${version}.zip",
+    "bin": "${baseUrl}/${skill}/bin/${platform}/${binary}",
+    "asset": "${baseUrl}/${skill}/${asset}"
+  },
+  "archiveName": "${skill}-${version}.zip"
+}

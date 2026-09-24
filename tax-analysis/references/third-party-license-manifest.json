@@ -1,0 +1,16 @@
+{
+  "files": {
+    "NODE-LICENSE.txt": { "sourceUrl": "https://raw.githubusercontent.com/nodejs/node/v24.8.0/LICENSE", "size": 143310, "sha256": "537308465103a306d0e3eecf42632b4ff1b48aaaec044e9fc10a78c81fd00b34" },
+    "RESVG-WASM-MPL-2.0.txt": { "sourceUrl": "https://raw.githubusercontent.com/thx/resvg-js/v2.6.2/LICENSE", "size": 16724, "sha256": "4b89d4518bd135ab4ee154a7bce722246b57a98c3d7efc1a09409898160c2bd1" },
+    "OPENTYPE-JS-MIT.txt": { "repoPath": "node_modules/opentype.js/LICENSE", "size": 1085, "sha256": "a5b87c9bc191e7f9c06b07bd7cbbed3ed846dfdb50e859484b2c245aa1ab2e61" },
+    "STRING-CODEPOINTAT-MIT.txt": { "repoPath": "node_modules/string.prototype.codepointat/LICENSE-MIT.txt", "size": 1077, "sha256": "483acb265f182907d1caf6cff9c16c96f31325ed23792832cc5d8b12d5f88c8a" },
+    "TINY-INFLATE-MIT.txt": { "repoPath": "node_modules/tiny-inflate/LICENSE", "size": 1077, "sha256": "c0df7f551401f8f80197ff31bf69b8cd23727d127423403282514d242a3ab132" },
+    "GOPDF-MIT.txt": { "goModule": "github.com/signintech/gopdf", "version": "v0.36.1", "modulePath": "LICENSE", "size": 1078, "sha256": "ef0abb2c9d81c5ccf30590664fa08e2300df758790cebb62e5d74c45be4f32f0" },
+    "GOFPDI-MIT.txt": { "goModule": "github.com/phpdave11/gofpdi", "version": "v1.0.14-0.20211212211723-1f10f9844311", "modulePath": "LICENSE", "size": 1151, "sha256": "ba28af8fcfb6e83a8f1232bed9b22076c268e98551da03c0a8f146d5e3cf0698" },
+    "PKG-ERRORS-BSD-2-CLAUSE.txt": { "goModule": "github.com/pkg/errors", "version": "v0.8.1", "modulePath": "LICENSE", "size": 1312, "sha256": "8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86" },
+    "GOLDMARK-MIT.txt": { "goModule": "github.com/yuin/goldmark", "version": "v1.8.2", "modulePath": "LICENSE", "size": 1071, "sha256": "c1d6f653c38c80294dc7994647ba0dcc508ce64a86996303c804efa2f7982bff" },
+    "GO-X-IMAGE-BSD-3-CLAUSE.txt": { "goModule": "golang.org/x/image", "version": "v0.25.0", "modulePath": "LICENSE", "size": 1453, "sha256": "911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad" },
+    "GO-X-SYS-BSD-3-CLAUSE.txt": { "goModule": "golang.org/x/sys", "version": "v0.41.0", "modulePath": "LICENSE", "size": 1453, "sha256": "911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad" },
+    "GO-X-TEXT-BSD-3-CLAUSE.txt": { "goModule": "golang.org/x/text", "version": "v0.34.0", "modulePath": "LICENSE", "size": 1453, "sha256": "911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad" }
+  }
+}
