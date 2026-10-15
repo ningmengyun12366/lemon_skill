@@ -1,134 +1,254 @@
-# invoice-assistant-skill
+# lemon_skill · 柠檬云 AI 财税开放平台 Skill 集合
 
-## AI财税咨询专家
+> 把 **发票开具、发票查验验真、税务分析、财税政策知识库** 这四类专业能力，**免费**接进你自己的 AI Agent、工作流或 SaaS 产品。
+> MIT 开源 · Go 静态二进制零运行时依赖 · 一套技能包同时跑在 7 个主流 AI 客户端
+>
+> *English companion: see [README_EN.md](README_EN.md) · 本说明以中文为准*
 
-**名字：** AI财税咨询专家_财税专家_财税实务咨询_税务合规建议_财税政策解读_柠檬云财税Skill
+![License](https://img.shields.io/badge/license-MIT-green)
+![Skills](https://img.shields.io/badge/skills-7-blue)
+![Go](https://img.shields.io/badge/Go-1.24%2B-00ADD8)
+![Node](https://img.shields.io/badge/Node-20%2B-339933)
+![Platform](https://img.shields.io/badge/platform-win%20%7C%20macOS%20%7C%20linux-lightgrey)
+![Open Platform](https://img.shields.io/badge/%E6%9F%A0%E6%AA%AC%E4%BA%91%E5%BC%80%E6%94%BE%E5%B9%B3%E5%8F%B0-%E5%85%8D%E8%B4%B9%E6%8E%A5%E5%85%A5-orange)
 
-**描述：**
+**官方文档与 API Key 申请：** https://www.nmy.cn
 
-柠檬云AI财税咨询专家Skill，依托国家税务总局、财政部、会计准则等权威财税知识库打造 AI 财税专家，为企业提供可解释、可追溯的财税实务咨询、政策解读与税务合规建议服务。
+---
 
-本 Skill 依托国家税务总局、财政部、会计准则等权威财税知识库打造 AI 财税专家，可针对企业财务、税务与经营过程中的实际问题，提供专业分析、政策依据解读及合规建议，并附带官方文件来源，确保相关结论有据可查。
+## 一句话给开发者
 
-- 企业财税咨询：支持企业财务、税务与经营过程中的实际问题判断与咨询，包括账务处理、纳税申报、发票管理及涉税事项处理建议；
-- 政策法规智能解读：对复杂财税法规进行结构化拆解与业务化解读，帮助用户理解政策在实际业务中的应用方式；
-- 官方依据溯源：相关解答自动匹配对应官方文件，附带政策原文跳转链接，确保结论有据可查；
+中国的发票和税务场景，你自己从头做，成本高到不值得：
 
-## 发票获取及风险分析
+| 你想做的事            | 自己做要付出的代价                        | 用这个 Skill 包                                      |
+| ---------------- | -------------------------------- | ------------------------------------------------ |
+| 开数电发票            | 对接各省市电子税务局、处理扫码登录、开票权限实名认证、会话保活  | `invoice-issue`                                  |
+| 给税收分类编码赋码        | 维护上千条商品编码与匹配规则，且每年更新             | 内置智能赋码（`invoice-issue`）                          |
+| 发票验真 + 查重        | 对接查验通道、处理限频、解析数电票 PDF/OFD/XML 版式 | `batch-invoice-verify`、`invoice-verify-analysis` |
+| 判断一张票能不能抵扣、有没有风险 | 自建风险规则 + 行业税负基线数据                | `invoice-fetch-and-risk-analysis`                |
+| 回答"这项支出能不能税前扣除"  | 持续追踪财政部、税务总局、会计准则的**时效性**政策库     | `tax-knowledge`（带官方文件溯源）                         |
+| 出一份像样的税务风险报告     | 拉通申报、财报、进销项、工商四路数据再建模            | `tax-analysis`（输出 DOCX / PDF）                    |
 
-**名字：** 发票获取_发票附件获取_发票风险分析_发票分析_发票整理_发票扫描_税务风险分析_柠檬云发票
+**这些我们已经在生产环境跑通了。你只需要一个免费的 API Key，把它接进你的产品。**
 
-**描述：**
+---
 
-柠檬云发票获取及风险分析Skill，一键获取指定期间发票及附件，自动整理统计，按纳税人 / 行业特性扫描税务风险，分角色输出可落地的分析结论和建议。
+## 目录
 
-本 Skill 可一键拉取指定企业、时间段内发票清单与电子附件，自动多维度统计，结合行业与纳税人属性识别税务风险，分角色输出可落地分析报告。
+- [能力矩阵](#能力矩阵)
+- [30 秒跑起来](#30-秒跑起来)
+- [它是怎么工作的](#它是怎么工作的)
+- [兼容哪些 AI 客户端](#兼容哪些-ai-客户端)
+- [免费额度](#免费额度)
+- [仓库结构](#仓库结构)
+- [自己构建](#自己构建)
+- [凭据与数据安全](#凭据与数据安全)
+- [关于贡献](#关于贡献)
+- [许可证](#许可证)
+- [English Index（英文索引）](#english-index英文索引)
 
-- 发票批量自动归集：输入企业名称与时间区间，自动拉取对应发票数据，同步下载数电发票附件并建立发票与附件关联索引，实现票据完整归集留存；
-- 多维度数据自动统计：自动汇总进销项金额、发票类型、月度营收、上下游合作方等六大维度统计数据，一键输出标准化统计结果；
-- 行业化税务风险诊断：结合企业所属行业、纳税人身份智能识别税负异常、进项不匹配等涉税风险，分角色输出整改建议报告；
+---
 
-## 企业发票核验与征信分析
+## 能力矩阵
 
-**名字：** 企业发票核验_企业征信分析_发票查验真伪_发票核验真实性_发票验真_发票分析_发票风控_柠檬云发票
+每个 Skill 都是一个独立目录，**可单独使用，不需要整套引入**。
 
-**描述：**
+| Skill                                                                 | 一句话能力                                        | 典型嵌入场景                | 版本    |
+| --------------------------------------------------------------------- | -------------------------------------------- | --------------------- | ----- |
+| [`invoice-issue`](invoice-issue/)                                     | 全场景开票：文字/语音单张、Excel 批量、合同/订单等非结构化资料开票，自动智能赋码 | 电商、ERP、CRM 的自动开票模块    | 0.1.6 |
+| [`batch-invoice-verify`](batch-invoice-verify/)                       | 批量发票查验 + 重复报销风控 + 自动生成台账                     | 报销系统、差旅平台、财务共享中心      | 0.1.4 |
+| [`invoice-verify-analysis`](invoice-verify-analysis/)                 | 发票真伪核验 + 企业征信/供应商尽调分析                        | 供应链风控、供应商准入审核         | 0.1.4 |
+| [`invoice-fetch-and-risk-analysis`](invoice-fetch-and-risk-analysis/) | 按企业+期间拉取发票与附件，多维统计、按行业/纳税人属性扫描税务风险           | 代账机构批量体检、企业财税健康度看板    | 0.1.6 |
+| [`invoice-reimbursement-assistant`](invoice-reimbursement-assistant/) | 邮箱自动采集发票 → 解析 → 验真 → 去重 → 报销清单归档             | 员工报销、票据中台             | 0.1.4 |
+| [`tax-analysis`](tax-analysis/)                                       | 融合申报、财报、进销项、工商数据，AI 输出可跳转目录的税务风险报告           | 财税顾问交付、贷前审查、尽调报告      | 0.1.1 |
+| [`tax-knowledge`](tax-knowledge/)                                     | 财税政策检索与解读，每条结论附官方文件来源                        | 财税问答机器人、Agent 的政策依据兜底 | 0.1.4 |
 
-柠檬云企业发票核验与经营分析 Skill，可自动核验发票真实性，基于发票数据生成结构化经营分析结果，支撑各类商业风控与审核场景。
+> 资金全流程管理（银行流水/回单/自动对账/资金分析报表）已在官方路线图中，敬请期待。
 
-本 Skill 适配多形式发票材料上传，自动完成发票真伪核验、异常票据识别，多维度统计分析发票数据，生成清晰的核验结果和分析报表。
+---
 
-- 多格式发票智能解析：兼容 Excel 清单、PDF / 图片等发票文件，自动提取票面信息；
-- 发票真伪核验：实时连接发票查验系统，自动提取发票关键信息并校验真伪与发票状态；
-- 智能整理生成发票台账：自动统计分析发票数据，生成标准化核验明细与经营分析报表，辅助商业风控决策；
+## 30 秒跑起来
 
-## 全场景开票
+### 1. 拿一个免费 API Key
 
-**名字：** 柠檬云发票开具_批量开票_文字/语音开票_批量开发票_文字/语音开发票_全场景开票
+到 [柠檬云 AI 财税开放平台](https://www.nmy.cn) 注册，**控制台 → API Key 管理** 创建即可（记得给 Key 绑定对应能力，如「发票查验」「财税知识库」）。
 
-**描述：**
+### 2. 装 Skill，或直接用 CLI
 
-柠檬云发票开具支持文字/语音单张开票、ERP订单批量开票、非结构化资料开票三大场景，提供开票全流程标准化服务。
+**方式 A：交给 AI 客户端自动装。** 在任意支持 Skill 的客户端里说一句：
 
-本 Skill 面向财务批量发票处理场景，自动多格式发票识别、真伪核验、查重风控，一键输出标准化发票台账，一站式解决人工逐票核对、重复报销管控难题。
+```
+帮我安装invoice-issue skill
+```
 
-- 多源开票资料解析：支持文字、ERP/电商订单等数据Excel、合同等开票资料解析，自动提取开票等关键字段，自动赋码；
-- 信息校验与开票确认：自动核对票面数据，生成预览，需人工确认后才开票，防止重复开票与信息差错；
-- 发票开具与交付：一键完成开票，获取税局发票PDF原件，一键交付收票方；
-- 测试一下
+客户端会自行下载发布包并按平台拉取二进制，无需你手动处理依赖。
 
-## 发票整理、查验及报销助手
+**方式 B：当作命令行工具直接使用（推荐给产品集成）。** 每个 Skill 编译时都会产出对应平台的静态二进制：
 
-**名字：** 发票整理_发票归档_发票识别_发票查验_发票采集_发票报销助手_柠檬云发票
+```bash
+# 财税知识库：政策检索，返回结构化 JSON + 官方文件溯源
+tax-knowledge retrieve \
+  --query "小规模纳税人 增值税 减免 政策 2026" \
+  --api-key "$LEMON_API_KEY" --pretty
 
-**描述：**
+# 企业税务风险分析：先看企业列表，再跑分析
+tax-analysis enterprises --api-key "$LEMON_API_KEY" --pretty
+tax-analysis run \
+  --company "示例科技有限公司" \
+  --start-month 2025-01 --end-month 2025-12 \
+  --api-key "$LEMON_API_KEY" --pretty
+```
 
-柠檬云发票Skill支持自动从邮箱收集发票，完成解析、查验、去重，生成标准化报销清单与归档文件，提升报销整理效率。
+命令一律输出**可解析 JSON**：成功走 stdout 的业务对象，失败也是 stdout 里的 JSON 错误对象，进度与诊断信息全部写 stderr。**可以直接用管道接进你自己的服务**。
 
-本skill聚焦企业员工报销全流程痛点，通过链接邮箱实现发票收集、真伪核验、自动整理，实现报销发票全流程自动处理。
+### 3. 把它装进你的 Agent
 
-- 发票自动收集：链接各种邮箱，自动提取邮箱里的电子发票文件；
-- 发票真伪核验：实时连接发票查验系统，自动提取发票关键信息并校验真伪与票据状态；
-- 智能整理归档：按费用类型、金额、日期自动分类排序，生成标准化发票报销清单；
+放进任意一个遵守 `SKILL.md` 约定的 Agent 技能目录即可被自动识别：
 
-## 发票查验查重及台账
+```
+<your-agent-skills-dir>/
+└── tax-knowledge/
+    ├── SKILL.md              # frontmatter 声明能力，body 是给模型看的执行规范
+    ├── README.md
+    ├── tax-knowledge-install.md
+    ├── config/
+    └── bin/darwin-arm64/tax-knowledge
+```
 
-**名字：** 发票查验-发票查重-发票台账生成-柠檬云发票
+---
 
-**描述：**
+## 它是怎么工作的
 
-柠檬云面向企业财务场景的制作的发票批处理AI助手，实现发票批量查验、重复报销风险识别及台账自动生成与维护。
+```mermaid
+flowchart LR
+    A["你的产品<br/>Agent / SaaS / 脚本"] --> B["SKILL.md<br/>能力声明 + 执行规范"]
+    B --> C["本地 CLI<br/>Go 静态二进制"]
+    C -->|"HTTPS + API Key"| D["柠檬云 AI 财税开放平台"]
+    D --> E["开票 · 查验 · 申报 · 财报<br/>政策库 · 工商信息"]
+    C --> F["结构化 JSON /<br/>Excel / PDF / DOCX"]
+    E --> F
+```
 
-本 Skill 面向财务批量发票处理场景，自动多格式发票识别、真伪核验、查重风控，一键输出标准化发票台账，一站式解决人工逐票核对、重复报销管控难题。
+设计上的几个取舍，都是为了让集成更省事：
 
-- 多格式发票自动扫描提取：自动读取文件夹内 PDF、OFD、图片类发票文件，过滤非发票文件；
-- 发票真伪核验+重复报销风险识别：实时连接发票查验系统，自动提取发票关键信息并校验真伪与票据状态；
-- 智能整理生成发票台账：批量处理，同步生成发票数据处理汇总摘要，一键输出标准化发票台账；
+- **薄 Agent、厚 CLI。** 凭证管理、重试、异步轮询、限频处理、结果归档这些脏活全部收敛在 CLI 里，模型只负责编排和自然语言理解。不会因为换了个模型版本就跑不通。
+- **静态二进制。** Go 单文件编译，不带 Python/Node 运行时，也不需要 `pip install`，沙箱和容器里都很干净。
+- **凭据只在运行时。** API Key 只通过 `--api-key` 参数传入，**从不写进源码、配置文件或日志**。配置文件里只放接口端点和能力开关。
+- **stdout 干净可解析。** 所有命令约定：业务结果走 stdout 且必须是 JSON，诊断信息走 stderr。
 
-## 企业税务风险分析
+---
 
-**名字：** 企业税务_税务分析_纳税申报分析_财务报表分析_发票分析_会计工具_税务风险识别_柠檬云企业税务风险分析Skill
+## 兼容哪些 AI 客户端
 
-**描述：**
+同一套 Skill 包无需改动，可直接用于以下已适配的平台：
 
-柠檬云AI财税开放平台：自动获取企业纳税申报、财务报表、进销项发票及工商等数据，AI综合识别潜在涉税风险，并生成专业税务风险分析报告。
+[WorkBuddy](https://copilot.tencent.com/work/) · [豆包工作](https://www.doubao.com/work) · [千问办公](https://qwenwork.cn/) · AutoClaw（智谱） · ArkClaw（字节跳动） · MaxClaw（MiniMax） · [OpenClaw](https://openclaw.ai/)
 
-本 Skill 面向企业税务风险分析场景，自动获取企业纳税申报、财务报表、进销项发票及工商等数据，由 AI 结合多维涉税数据进行综合分析，识别企业潜在税务风险，并生成包含风险分析、风险提示及处理建议的专业税务风险分析报告。
+只要你的 Agent 遵循 `SKILL.md` 规范（读取 frontmatter 里的 `name` / `description` 来决定是否调用），这套能力就能挂上去。
 
-- 自动获取涉税数据：自动获取企业纳税申报、财务报表、进销项发票等涉税数据，并结合企业工商及相关风险信息，为税务风险分析提供数据基础；
-- AI 智能识别税务风险：结合企业申报、财务、发票及工商等多维数据，由 AI 综合分析企业经营与纳税情况，识别潜在涉税风险及异常事项；
-- 生成专业风险分析报告：自动汇总风险分析结果，生成包含风险结论、重点风险事项、处理建议及可视化图表的税务风险分析报告，并支持 PDF 输出；
+---
 
-本仓库提供 7 个税务相关 Skill，以及对应的 Go 命令行实现和生产环境打包脚本：
+## 免费额度
 
-本仓库仅用于公开源码，不开放 Issue、Pull Request 或外部贡献。
+开发者和个人用户可以免费接入，以下为开放平台公开额度，**具体以控制台显示为准**：
 
-- `batch-invoice-verify`
-- `invoice-fetch-and-risk-analysis`
-- `invoice-issue`
-- `invoice-reimbursement-assistant`
-- `invoice-verify-analysis`
-- `tax-analysis`
-- `tax-knowledge`
+| 能力          | 免费额度        |
+| ----------- | ----------- |
+| 发票开具（含智能赋码） | 每月 10,000 张 |
+| 发票查验 / 真伪核验 | 每月 20,000 张 |
 
-## 生产构建
+想做产品级用量、商用授权或更高配额，可在开放平台控制台查看套餐或联系客服。
 
-构建要求 Node.js 20+ 和 Go 1.24+。请在仓库根目录执行：
+---
 
-```powershell
+## 仓库结构
+
+```
+lemon_skill/
+├── invoice-issue/                       # 每个 Skill 一个独立目录
+│   ├── SKILL.md                         # 给 Agent 看的能力定义与执行流程
+│   ├── README.md                        # 给使用者看的产品说明
+│   ├── invoice-issue-install.md         # 安装 / 更新 / 回滚流程
+│   └── references/                      # API 契约、字段映射、错误处理、风控边界
+├── batch-invoice-verify/
+├── invoice-verify-analysis/
+├── invoice-fetch-and-risk-analysis/
+├── invoice-reimbursement-assistant/
+├── tax-analysis/
+├── tax-knowledge/
+└── go-script/                           # Go 命令行实现 + 生产打包脚本
+    ├── lib/                             # 各能力模块源码
+    ├── build.js                         # 构建编排
+    ├── audit-packages.js                # 发布物审计
+    └── config/prod.json                 # 生产接口端点注入
+```
+
+`references/` 是最值得先看的部分——那是每个能力的真实接口契约、字段口径和错误码语义。
+
+---
+
+## 自己构建
+
+要求 **Node.js 20+** 与 **Go 1.24+**：
+
+```bash
 npm ci
 npm run build
 npm run audit:prod
 ```
 
-生产发布物生成在 `dist/Skills/<skill>/`。ZIP 包包含 Skill 文档、安装说明、生产运行配置、引用资料和必要资源；多平台二进制位于对应发布目录的 `bin/<platform>/`。`dist/` 是本地生成目录，不应提交到 Git。
+产物落在 `dist/Skills/<skill>/`：ZIP 包内含 Skill 文档、安装说明、生产运行配置与必要资源；各平台二进制在对应发布目录的 `bin/<platform>/` 下，支持 `windows-amd64`、`linux-amd64`、`linux-arm64`、`darwin-amd64`、`darwin-arm64`。
 
-## 配置与数据安全
+`dist/` 是本地生成目录，不进 Git。
 
-- API 凭据由使用者在本地工作区配置，不应写入源码、文档或日志。
-- 生产接口通过 `go-script/config/prod.json` 注入发布包。
-- 安全问题请按照 [SECURITY.md](SECURITY.md) 私下报告。
+---
+
+## 凭据与数据安全
+
+- API Key 只由使用者在工作区本地配置，**不得写入源码、文档或日志**；发布包内的配置文件只包含接口端点与能力开关。
+- 生产接口端点通过 `go-script/config/prod.json` 在构建期注入。
+- 每个 Skill 都内置开户/取数前的预检（`task-preflight-check`），凭证异常会明确阻断而不是带病执行。
+- 发票、申报等属于敏感业务数据，请按你所在场景的合规要求进行存储与留痕。
+- 发现安全问题，请用本仓库的 **Private vulnerability reporting** 私下提交，**不要开公开 Issue**。详见 [SECURITY.md](SECURITY.md)。
+
+---
+
+## 关于贡献
+
+本仓库用于**公开源码与版本分发**，目前不开放 Issue 与 Pull Request。这不是拒绝反馈——功能建议、适配需求、集成问题，请直接联系开放平台客服，比 Issue 更快得到响应。
+
+---
 
 ## 许可证
 
-本项目自有代码、文档和资源文件采用 [MIT License](LICENSE)；第三方组件与字体许可见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+本项目自有代码、文档与资源采用 [MIT License](LICENSE)，允许商用与二次分发。第三方组件与字体许可见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+
+---
+
+## English Index（英文索引）
+
+面向搜索与外部检索的简要对照，能力定义以本文中文部分为准。完整英文说明见 [README_EN.md](README_EN.md)。
+
+| Skill                             | Official English description                                                                                                          |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `invoice-issue`                   | Supports single, batch, and digital invoice issuance, authorization, and issuance result queries.                                     |
+| `batch-invoice-verify`            | Batch-identifies and verifies invoices, checks invoice headers and duplicate risks, and generates a ledger.                           |
+| `invoice-verify-analysis`         | Verifies enterprise invoices, analyzes invoice activity and anomaly risks, and generates Excel and PDF reports.                       |
+| `invoice-fetch-and-risk-analysis` | Fetches invoices and attachments, analyzes invoice data, and identifies invoice-related risks.                                        |
+| `invoice-reimbursement-assistant` | Extracts invoice attachments from email, verifies and categorizes them, checks invoice headers, and generates a reimbursement ledger. |
+| `tax-analysis`                    | Synchronizes enterprise tax and business registry data and generates matching navigable DOCX and PDF tax risk reports.                |
+| `tax-knowledge`                   | Provides tax policy research, validity checks, applicability guidance, and tax risk explanations.                                     |
+
+**Search terms:** invoice API China · fapiao · fully digitalized invoice (数电发票) · invoice verification · duplicate reimbursement check · invoice OCR · tax classification code · Chinese VAT · corporate tax risk analysis · tax policy database · SKILL.md agent skill · OpenClaw · MCP tool-use
+
+---
+
+<div align="center">
+
+**给 AI 加一块「中国财税」的专业能力，从这里开始。**
+
+[开放平台 · 免费获取 API Key](https://www.nmy.cn) · [能力矩阵](#能力矩阵) · [快速开始](#30-秒跑起来)
+
+</div>
+
+<!-- 关键词：中国发票API 数电发票 全电发票 发票查验 发票验真 发票查重 发票台账 报销归集 发票开具 开票 批量开票 智能赋码 税收分类编码 税务风险分析 纳税申报 财务报表 企业征信 供应商尽调 财税政策库 税收优惠 进项抵扣 税前扣除 增值税 Agent Skill SKILL.md OpenClaw Claude Skill MCP 智能体 财税大模型 代账 invoice API China fapiao API China tax API VAT China digital invoice electronic invoice tax compliance LLM agent tool-use -->
