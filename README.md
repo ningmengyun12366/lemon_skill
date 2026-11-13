@@ -3,7 +3,6 @@
 > 把 **发票开具、发票查验验真、税务分析、财税政策知识库** 这四类专业能力，**免费**接进你自己的 AI Agent、工作流或 SaaS 产品。
 > MIT 开源 · Go 静态二进制零运行时依赖 · 一套技能包同时跑在 7 个主流 AI 客户端
 >
-> *English companion: see [README_EN.md](README_EN.md) · 本说明以中文为准*
 
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Skills](https://img.shields.io/badge/skills-7-blue)
